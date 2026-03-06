@@ -94,6 +94,7 @@ var propertyNames = new[]
 	"kTotalStrokes",
 	"kTraditionalVariant",
 	"kVietnamese",
+	"kVietnameseNumeric",
 	"kXerox",
 	"kXHC1983",
 };

@@ -8,8 +8,7 @@ This project consists of a library that provides access to some of the data cont
 
 ## Version of Unicode supported
 
-Unicode 13.0
-Emoji 13.0
+Unicode 17.0
 
 ## Breaking changes from versions 1.x to 2.x
 

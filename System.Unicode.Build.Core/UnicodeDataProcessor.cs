@@ -242,8 +242,13 @@ namespace System.Unicode.Build.Core
 				while (reader.MoveToNextLine())
 				{
 					string radicalIndexText = reader.ReadField();
-					bool isSimplified = radicalIndexText[radicalIndexText.Length - 1] == '\'';
-					int radicalIndex = int.Parse(isSimplified ? radicalIndexText.Substring(0, radicalIndexText.Length - 1) : radicalIndexText);
+					int apostropheCount = 0;
+					for (int i = radicalIndexText.Length - 1; i >= 0 && radicalIndexText[i] == '\''; i--) apostropheCount++;
+					bool isSimplified = apostropheCount > 0;
+					int radicalIndex = int.Parse(apostropheCount > 0 ? radicalIndexText.Substring(0, radicalIndexText.Length - apostropheCount) : radicalIndexText);
+
+					// Skip entries with double/triple apostrophes (additional simplified forms beyond what the data model supports)
+					if (apostropheCount > 1) continue;
 
 					if (isSimplified ? radicalIndex != lastReadRadical : lastReadRadical + 1 != (lastReadRadical = radicalIndex))
 						throw new InvalidDataException("Did not expect radical number " + radicalIndexText + ".");
@@ -508,10 +513,14 @@ namespace System.Unicode.Build.Core
 						entry.NumericType = UnihanNumericType.Primary;
 						break;
 					default:
-						throw new InvalidDataException("Unrecognized property name: " + reader.PropertyName + ".");
+						// Treat any other numeric property (e.g. kVietnameseNumeric, kZhuangNumeric) as Other
+						entry.NumericType = UnihanNumericType.Other;
+						break;
 					}
 
-					entry.NumericValue = long.Parse(reader.PropertyValue);
+					string numericText = reader.PropertyValue;
+					int spaceIndex = numericText.IndexOf(' ');
+					entry.NumericValue = long.Parse(spaceIndex >= 0 ? numericText.Substring(0, spaceIndex) : numericText);
 				}
 			}
 		}
@@ -531,7 +540,7 @@ namespace System.Unicode.Build.Core
 						foreach (string value in values)
 						{
 							bool isSimplified = false;
-							int index;
+							int separatorIndex;
 
 							for (int i = 0; i < value.Length; ++i)
 							{
@@ -539,16 +548,20 @@ namespace System.Unicode.Build.Core
 								{
 								case '\'':
 									isSimplified = true;
-									goto case '.';
+									// Skip all consecutive apostrophes (Unicode 16.0+ may use '' or ''')
+									while (i + 1 < value.Length && value[i + 1] == '\'') i++;
+									continue;
 								case '.':
-									index = i;
+									separatorIndex = i;
 									goto SeparatorFound;
 								}
 							}
 							throw new InvalidDataException("Failed to decode value for kRSUnicode / Unicode_Radical_Stroke.");
 
 						SeparatorFound:;
-							entry.UnicodeRadicalStrokeCounts.Add(new UnicodeRadicalStrokeCount(byte.Parse(value.Substring(0, index), NumberStyles.None), sbyte.Parse(value.Substring(index + (isSimplified ? 2 : 1)), NumberStyles.AllowLeadingSign), isSimplified));
+							int radicalEndIndex = value.IndexOf('\'');
+							if (radicalEndIndex < 0) radicalEndIndex = separatorIndex;
+							entry.UnicodeRadicalStrokeCounts.Add(new UnicodeRadicalStrokeCount(byte.Parse(value.Substring(0, radicalEndIndex), NumberStyles.None), sbyte.Parse(value.Substring(separatorIndex + 1), NumberStyles.AllowLeadingSign), isSimplified));
 						}
 						break;
 					default:

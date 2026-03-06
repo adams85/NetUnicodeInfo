@@ -60,6 +60,8 @@ namespace System.Unicode.Tests
 		[InlineData(0x1E4F9, UnicodeCategory.DecimalDigitNumber, UnicodeNumericType.Decimal, "9", "NAG MUNDARI DIGIT NINE", "Nag Mundari")]
 		[InlineData(0x1D2C0, UnicodeCategory.OtherNumber, UnicodeNumericType.Numeric, "0", "KAKTOVIK NUMERAL ZERO", "Kaktovik Numerals")]
 		[InlineData(0x1D2D3, UnicodeCategory.OtherNumber, UnicodeNumericType.Numeric, "19", "KAKTOVIK NUMERAL NINETEEN", "Kaktovik Numerals")]
+		[InlineData(0x2EBF0, UnicodeCategory.OtherLetter, UnicodeNumericType.None, null, "CJK IDEOGRAPH EXTENSION I-2EBF0", "CJK Unified Ideographs Extension I")]
+		[InlineData(0x323B0, UnicodeCategory.OtherLetter, UnicodeNumericType.None, null, "CJK IDEOGRAPH EXTENSION J-323B0", "CJK Unified Ideographs Extension J")]
 		public void CharacterInfoShouldHaveExpectedResults(int codePoint, UnicodeCategory expectedCategory, UnicodeNumericType expectedNumericType, string expectedNumericValue, string expectedName, string expectedBlock)
 		{
 			var info = UnicodeInfo.GetCharInfo(codePoint);

@@ -89,6 +89,7 @@ namespace System.Unicode.Build.Core
 		public const string TotalStrokes = "kTotalStrokes";
 		public const string TraditionalVariant = "kTraditionalVariant";
 		public const string Vietnamese = "kVietnamese";
+		public const string VietnameseNumeric = "kVietnameseNumeric";
 		public const string Xerox = "kXerox";
 		public const string XHC1983 = "kXHC1983";
 	}

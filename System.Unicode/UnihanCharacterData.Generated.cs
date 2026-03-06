@@ -17,7 +17,7 @@ namespace System.Unicode
 					else if (codePoint >= 0xF900)
 					{
 						// F900..FAFF; CJK Compatibility Ideographs
-						if (codePoint < 0xFB00) return codePoint + 0x08240;
+						if (codePoint < 0xFB00) return codePoint + 0x09580;
 						else if (codePoint >= 0x20000)
 						{
 							// 20000..2A6DF; CJK Unified Ideographs Extension B
@@ -28,16 +28,18 @@ namespace System.Unicode
 								// 2B740..2B81F; CJK Unified Ideographs Extension D
 								// 2B820..2CEAF; CJK Unified Ideographs Extension E
 								// 2CEB0..2EBEF; CJK Unified Ideographs Extension F
-								if (codePoint < 0x2EBF0) return codePoint - 0x19460;
+								// 2EBF0..2EE5F; CJK Unified Ideographs Extension I
+								if (codePoint < 0x2EE60) return codePoint - 0x19460;
 								else if (codePoint >= 0x2F800)
 								{
 									// 2F800..2FA1F; CJK Compatibility Ideographs Supplement
-									if (codePoint < 0x2FA20) return codePoint - 0x17AC0;
+									if (codePoint < 0x2FA20) return codePoint - 0x16780;
 									else if (codePoint >= 0x30000)
 									{
 										// 30000..3134F; CJK Unified Ideographs Extension G
 										// 31350..323AF; CJK Unified Ideographs Extension H
-										if (codePoint < 0x323B0) return codePoint - 0x1A870;
+										// 323B0..3347F; CJK Unified Ideographs Extension J
+										if (codePoint < 0x33480) return codePoint - 0x1A600;
 									}
 								}
 							}
@@ -64,14 +66,16 @@ namespace System.Unicode
 				// 2B740..2B81F; CJK Unified Ideographs Extension D
 				// 2B820..2CEAF; CJK Unified Ideographs Extension E
 				// 2CEB0..2EBEF; CJK Unified Ideographs Extension F
-				else if (packedCodePoint < 0x15790) return packedCodePoint + 0x19460;
+				// 2EBF0..2EE5F; CJK Unified Ideographs Extension I
+				else if (packedCodePoint < 0x15A00) return packedCodePoint + 0x19460;
 				// 30000..3134F; CJK Unified Ideographs Extension G
 				// 31350..323AF; CJK Unified Ideographs Extension H
-				else if (packedCodePoint < 0x17B40) return packedCodePoint + 0x1A870;
+				// 323B0..3347F; CJK Unified Ideographs Extension J
+				else if (packedCodePoint < 0x18E80) return packedCodePoint + 0x1A600;
 				// F900..FAFF; CJK Compatibility Ideographs
-				else if (packedCodePoint < 0x17D40) return packedCodePoint - 0x8240;
+				else if (packedCodePoint < 0x19080) return packedCodePoint - 0x9580;
 				// 2F800..2FA1F; CJK Compatibility Ideographs Supplement
-				else if (packedCodePoint < 0x17F60) return packedCodePoint + 0x17AC0;
+				else if (packedCodePoint < 0x192A0) return packedCodePoint + 0x16780;
 			}
 			throw new ArgumentOutOfRangeException(nameof(packedCodePoint));
 		}
