@@ -11,7 +11,7 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<AssemblyName>UnicodeInformation</AssemblyName>
 		<Deterministic>true</Deterministic>
-		<PathMap>$(MSBuildThisFileDirectory)=C:\Sources\NetUnicodeInfo\System.Unicode</PathMap>
+		<PathMap>$(MSBuildThisFileDirectory)=D:\Dev\NetUnicodeInfo\System.Unicode</PathMap>
 		<NoWarn>$(NoWarn);NETSDK1138</NoWarn>
 	</PropertyGroup>
 
@@ -20,67 +20,17 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Package">
-		<PackageId>UnicodeInformation</PackageId>
+		<PackageId>UnicodeInformation.Preview</PackageId>
 		<Title>.NET Unicode Information Library</Title>
 		<AssemblyTitle>.NET Unicode Information Library</AssemblyTitle>
 		<Description>Library providing access to Unicode data to .NET clients.</Description>
 		<PackageTags>Unicode Unihan Data .NET C# String Text Char Character CodePoint Code Point</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/GoldenCrystal/NetUnicodeInfo</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/adams85/NetUnicodeInfo</PackageProjectUrl>
 		<PackageIcon>packageIcon.png</PackageIcon>
-		<RepositoryUrl>https://github.com/GoldenCrystal/NetUnicodeInfo.git</RepositoryUrl>
+		<RepositoryUrl>https://github.com/adams85/NetUnicodeInfo.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageReleaseNotes>Version 2.8.0
--------------
-Support for Unicode 17.0
-
-Version 2.7.1
--------------
-Fix startup performance regression at the cost of more memory usage during startup.
-
-Version 2.7.0
--------------
-Support for Unicode 15.0
-
-Version 2.6.0
--------------
-Support for Unicode 14.0
-Bugfix in CjkRadicalData
-Reduce string allocations for a few methods on frameworks where native Span is available.
-
-Version 2.5.1
--------------
-Fix for .NET 6
-
-Version 2.5.0
--------------
-Support for Unicode 13.0.
-
--------------
-Support for Unicode 12.1.
-Added the missing Emoji properties Extended_Pictographic and EmojiModifier that were missing. 🎉
-Structs that were immutable have been marked as readonly.
-
-Version 2.3.0
--------------
-Support for Unicode 12.0.
-Target .NET Standard 2.0.
-
-Version 2.2.1
--------------
-Added DebuggerDisplay attributes on various types.
-
-Version 2.2.0
--------------
-Added emoji properties.
-
-Version 2.1.0
--------------
-Support for Unicode 10.0.
-
-Version 2.0.0
--------------
-Following migration to Unicode 9.0.0, UnicodeRadicalStrokeCount.StrokeCount is now of type System.SByte instead of type System.Byte.</PackageReleaseNotes>
+		<PackageReleaseNotes>This is a fork of the original UnicodeInformation project (https://github.com/hexawyz/NetUnicodeInfo), with Unicode version updated to 17.0.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<!-- Add the icon for the package. -->
@@ -98,7 +48,7 @@ Following migration to Unicode 9.0.0, UnicodeRadicalStrokeCount.StrokeCount is n
 
 		<!-- Call the project that will build the database.
 		Thanks to caching, this shouldn't actually be called more than once for all the target frameworks. -->
-		<MSBuild Projects="GenerateUnicodeDatabase.proj" Properties="Configuration=$(Configuration)" RemoveProperties="TargetFramework" Targets="Build" />
+		<MSBuild Condition="'$(NoBuild)' != 'true'" Projects="GenerateUnicodeDatabase.proj" Properties="Configuration=$(Configuration)" RemoveProperties="TargetFramework" Targets="Build" />
 
 		<!-- Determine if ucd.dat file has been included as a resource during the evaluation phase. -->
 		<FindInList List="@(EmbeddedResource)" ItemSpecToFind="ucd.dat">
