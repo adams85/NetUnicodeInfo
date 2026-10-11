@@ -16,6 +16,8 @@ namespace System.Unicode
 		public readonly string VietnameseReading;
 		public readonly string SimplifiedVariant;
 		public readonly string TraditionalVariant;
+		public readonly string JapaneseOldVariant;
+		public readonly string JapaneseNewVariant;
 
 		internal UnihanCharacterData
 		(
@@ -32,7 +34,9 @@ namespace System.Unicode
 			string hangulReading,
 			string vietnameseReading,
 			string simplifiedVariant,
-			string traditionalVariant
+			string traditionalVariant,
+			string japaneseOldVariant,
+			string japaneseNewVariant
 		)
 		{
 			CodePoint = codePoint;
@@ -49,6 +53,8 @@ namespace System.Unicode
 			VietnameseReading = vietnameseReading;
 			SimplifiedVariant = simplifiedVariant;
 			TraditionalVariant = traditionalVariant;
+			JapaneseOldVariant = japaneseOldVariant;
+			JapaneseNewVariant = japaneseNewVariant;
 		}
 	}
 }

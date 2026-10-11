@@ -250,6 +250,8 @@ namespace System.Unicode
 			string vietnameseReading = (fields & UnihanFields.VietnameseReading) != 0 ? reader.ReadString() : null;
 			string simplifiedVariant = (fields & UnihanFields.SimplifiedVariant) != 0 ? reader.ReadString() : null;
 			string traditionalVariant = (fields & UnihanFields.TraditionalVariant) != 0 ? reader.ReadString() : null;
+			string japaneseOldVariant = (fields & UnihanFields.JapaneseOldVariant) != 0 ? reader.ReadString() : null;
+			string japaneseNewVariant = (fields & UnihanFields.JapaneseNewVariant) != 0 ? reader.ReadString() : null;
 
 			value = new UnihanCharacterData
 			(
@@ -266,7 +268,9 @@ namespace System.Unicode
 				hangulReading,
 				vietnameseReading,
 				simplifiedVariant,
-				traditionalVariant
+				traditionalVariant,
+				japaneseOldVariant,
+				japaneseNewVariant
 			);
 		}
 

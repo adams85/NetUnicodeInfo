@@ -27,10 +27,10 @@ namespace System.Unicode
 		internal UnicodeRadicalStrokeCount(byte radical, sbyte strokeCount, bool isSimplified)
 		{
 			// Two's complement doesn't work anymore there, as we have some code points with more than 64 additional strokes.
-			// Negative strokes don't seem to go below -4 for now, so we'll map value between -4 and 123 as 124..127;0..123.
+			// Negative strokes don't seem to go below -9 for now, so we'll map value between -16 and 111 as 112..127;0..111.
 			// Clamp values outside the representable range.
-			if (strokeCount < -4) strokeCount = -4;
-			else if (strokeCount > 127 - 4) strokeCount = 127 - 4;
+			if (strokeCount < -16) strokeCount = -16;
+			else if (strokeCount > 127 - 16) strokeCount = 127 - 16;
 
 			Radical = radical;
 			// Pack strokeCount together with isSimplified in a single byte.
@@ -45,14 +45,14 @@ namespace System.Unicode
 		/// <summary>Gets the value of <see cref="StrokeCount"/> packed with <see cref="IsSimplified"/>.</summary>
 		/// <remarks>
 		/// The stroke count is stored as a 7bit value, together with the <see cref="IsSimplified"/> flag as a 1bit value.
-		/// Raw values between 124 and 127 represent negative stroke counts -4 to -1.
+		/// Raw values between 112 and 127 represent negative stroke counts -16 to -1.
 		/// </remarks>
 		/// <value>The raw value of <see cref="StrokeCount"/>.</value>
 		internal byte RawStrokeCount { get; }
 
 		/// <summary>Gets the additional stroke count.</summary>
 		/// <value>The additional stroke count.</value>
-		public sbyte StrokeCount => (RawStrokeCount & 0x7F) is int c && c > 123 ? unchecked((sbyte)(c - 128)) : unchecked((sbyte)c);
+		public sbyte StrokeCount => (RawStrokeCount & 0x7F) is int c && c > 111 ? unchecked((sbyte)(c - 128)) : unchecked((sbyte)c);
 
 		/// <summary>Gets a value indicating whether the information is based on the simplified form of the radical.</summary>
 		/// <value><see langword="true" /> if the information is based on the simplified form of the radical; otherwise, <see langword="false" />.</value>

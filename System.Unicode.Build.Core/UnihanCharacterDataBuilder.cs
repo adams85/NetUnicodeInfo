@@ -18,6 +18,8 @@ namespace System.Unicode.Build.Core
 		public string VietnameseReading { get; set; }
 		public string SimplifiedVariant { get; set; }
 		public string TraditionalVariant { get; set; }
+		public string JapaneseOldVariant { get; set; }
+		public string JapaneseNewVariant { get; set; }
 		public IList<UnicodeRadicalStrokeCount> UnicodeRadicalStrokeCounts => _unicodeRadicalStrokeCounts;
 
 		private readonly List<UnicodeRadicalStrokeCount> _unicodeRadicalStrokeCounts = new List<UnicodeRadicalStrokeCount>();
@@ -40,7 +42,9 @@ namespace System.Unicode.Build.Core
 				HangulReading,
 				VietnameseReading,
 				SimplifiedVariant,
-				TraditionalVariant
+				TraditionalVariant,
+				JapaneseOldVariant,
+				JapaneseNewVariant
 			);
 
 		internal void WriteToFile(BinaryWriter writer)
@@ -66,6 +70,8 @@ namespace System.Unicode.Build.Core
 			if (VietnameseReading != null) fields |= UnihanFields.VietnameseReading;
 			if (SimplifiedVariant != null) fields |= UnihanFields.SimplifiedVariant;
 			if (TraditionalVariant != null) fields |= UnihanFields.TraditionalVariant;
+			if (JapaneseOldVariant != null) fields |= UnihanFields.JapaneseOldVariant;
+			if (JapaneseNewVariant != null) fields |= UnihanFields.JapaneseNewVariant;
 
 			writer.Write((ushort)fields);
 
@@ -94,6 +100,8 @@ namespace System.Unicode.Build.Core
 			if ((fields & UnihanFields.VietnameseReading) != 0) writer.Write(VietnameseReading);
 			if ((fields & UnihanFields.SimplifiedVariant) != 0) writer.Write(SimplifiedVariant);
 			if ((fields & UnihanFields.TraditionalVariant) != 0) writer.Write(TraditionalVariant);
+			if ((fields & UnihanFields.JapaneseOldVariant) != 0) writer.Write(JapaneseOldVariant);
+			if ((fields & UnihanFields.JapaneseNewVariant) != 0) writer.Write(JapaneseNewVariant);
 		}
 	}
 }

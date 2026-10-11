@@ -8,7 +8,7 @@ This project consists of a library that provides access to some of the data cont
 
 ## Version of Unicode supported
 
-Unicode 17.0
+Unicode 18.0
 
 ## Breaking changes from versions 1.x to 2.x
 
@@ -174,6 +174,8 @@ NB: The UCD property ISO_Comment will never be included since this one is empty 
 * kVietnamese
 * kSimplifiedVariant
 * kTraditionalVariant
+* kJapaneseOldVariant
+* kJapaneseNewVariant
 
 ### Regenerating  the data
 The project UnicodeInformation.Builder takes cares of generating a file named ucd.dat. This file contains Unicode data compressed by .NET's deflate algorithm, and should be included in UnicodeInformation.dll at compilation.

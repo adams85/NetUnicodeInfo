@@ -9,6 +9,39 @@ namespace System.Unicode.Tests
 		public void UnicodeVersionShouldBeTheLatestSupported()
 			=> Assert.Equal(RequestedUnicodeVersion.Value, UnicodeInfo.UnicodeVersion);
 
+		[Theory]
+		[InlineData(0x4E07, "\u4E07\u842C", "\u4E07")]
+		public void SimplifiedAndTraditionalVariantsShouldIncludeAllValues(int codePoint, string expectedTraditionalVariant, string expectedSimplifiedVariant)
+		{
+			var info = UnicodeInfo.GetCharInfo(codePoint);
+			Assert.Equal(expectedTraditionalVariant, info.TraditionalVariant);
+			Assert.Equal(expectedSimplifiedVariant, info.SimplifiedVariant);
+		}
+
+		[Theory]
+		[InlineData(0x4E07, "\u842C", null)]
+		[InlineData(0x4E58, null, "\u4E57")]
+		[InlineData(0x5F01, "\u74E3\u8FA8\u8FAF", null)]
+		public void JapaneseVariantsShouldBeAvailable(int codePoint, string expectedOldVariant, string expectedNewVariant)
+		{
+			var info = UnicodeInfo.GetCharInfo(codePoint);
+			Assert.Equal(expectedOldVariant, info.JapaneseOldVariant);
+			Assert.Equal(expectedNewVariant, info.JapaneseNewVariant);
+		}
+
+		[Theory]
+		[InlineData(0x3400, "CJK UNIFIED IDEOGRAPH-3400")]
+		[InlineData(0x4E00, "CJK UNIFIED IDEOGRAPH-4E00")]
+		[InlineData(0x29C0A, "CJK UNIFIED IDEOGRAPH-29C0A")]
+		[InlineData(0x33473, "CJK UNIFIED IDEOGRAPH-33473")]
+		[InlineData(0x18E00, "JURCHEN CHARACTER-18E00")]
+		[InlineData(0x3D000, "SMALL SEAL CHARACTER-3D000")]
+		[InlineData(0xD800, null)]
+		[InlineData(0xE000, null)]
+		[InlineData(0xF0000, null)]
+		public void AlgorithmicNamesShouldMatchDerivedNameData(int codePoint, string expectedName)
+			=> Assert.Equal(expectedName, UnicodeInfo.GetName(codePoint));
+
 		[Fact]
 		public void ControlCharactersShouldHaveSpecificDisplayText()
 		{
@@ -52,7 +85,7 @@ namespace System.Unicode.Tests
 		[InlineData(0x32FF, UnicodeCategory.OtherSymbol, UnicodeNumericType.None, null, "SQUARE ERA NAME REIWA", "Enclosed CJK Letters and Months")]
 		[InlineData(0x1F9A4, UnicodeCategory.OtherSymbol, UnicodeNumericType.None, null, "DODO", "Supplemental Symbols and Pictographs")]
 		[InlineData(0x1F9AD, UnicodeCategory.OtherSymbol, UnicodeNumericType.None, null, "SEAL", "Supplemental Symbols and Pictographs")]
-		[InlineData(0x31350, UnicodeCategory.OtherLetter, UnicodeNumericType.None, null, "CJK IDEOGRAPH EXTENSION H-31350", "CJK Unified Ideographs Extension H")]
+		[InlineData(0x31350, UnicodeCategory.OtherLetter, UnicodeNumericType.None, null, "CJK UNIFIED IDEOGRAPH-31350", "CJK Unified Ideographs Extension H")]
 		[InlineData(0x1FADA, UnicodeCategory.OtherSymbol, UnicodeNumericType.None, null, "GINGER ROOT", "Symbols and Pictographs Extended-A")]
 		[InlineData(0x11F50, UnicodeCategory.DecimalDigitNumber, UnicodeNumericType.Decimal, "0", "KAWI DIGIT ZERO", "Kawi")]
 		[InlineData(0x11F59, UnicodeCategory.DecimalDigitNumber, UnicodeNumericType.Decimal, "9", "KAWI DIGIT NINE", "Kawi")]
@@ -60,8 +93,8 @@ namespace System.Unicode.Tests
 		[InlineData(0x1E4F9, UnicodeCategory.DecimalDigitNumber, UnicodeNumericType.Decimal, "9", "NAG MUNDARI DIGIT NINE", "Nag Mundari")]
 		[InlineData(0x1D2C0, UnicodeCategory.OtherNumber, UnicodeNumericType.Numeric, "0", "KAKTOVIK NUMERAL ZERO", "Kaktovik Numerals")]
 		[InlineData(0x1D2D3, UnicodeCategory.OtherNumber, UnicodeNumericType.Numeric, "19", "KAKTOVIK NUMERAL NINETEEN", "Kaktovik Numerals")]
-		[InlineData(0x2EBF0, UnicodeCategory.OtherLetter, UnicodeNumericType.None, null, "CJK IDEOGRAPH EXTENSION I-2EBF0", "CJK Unified Ideographs Extension I")]
-		[InlineData(0x323B0, UnicodeCategory.OtherLetter, UnicodeNumericType.None, null, "CJK IDEOGRAPH EXTENSION J-323B0", "CJK Unified Ideographs Extension J")]
+		[InlineData(0x2EBF0, UnicodeCategory.OtherLetter, UnicodeNumericType.None, null, "CJK UNIFIED IDEOGRAPH-2EBF0", "CJK Unified Ideographs Extension I")]
+		[InlineData(0x323B0, UnicodeCategory.OtherLetter, UnicodeNumericType.None, null, "CJK UNIFIED IDEOGRAPH-323B0", "CJK Unified Ideographs Extension J")]
 		public void CharacterInfoShouldHaveExpectedResults(int codePoint, UnicodeCategory expectedCategory, UnicodeNumericType expectedNumericType, string expectedNumericValue, string expectedName, string expectedBlock)
 		{
 			var info = UnicodeInfo.GetCharInfo(codePoint);

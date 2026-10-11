@@ -66,6 +66,11 @@ namespace System.Unicode.Build.Core
 					match = Regex.Match(text, @"Unicode\s+(?<Major>[1-9][0-9]*)\.(?<Minor>[0-9]+)\.(?<Update>[0-9]+)\.");
 				}
 
+				if (!match.Success)
+				{
+					match = Regex.Match(text, @"version\s+(?<Major>[1-9][0-9]*)\.(?<Minor>[0-9]+)\.(?<Update>[0-9]+)\s+of\s+the\s+Unicode\s+Character\s+Database");
+				}
+
 				if (!match.Success) throw new InvalidDataException("Could not determine the version of the Unicode standard defined in the files.");
 
 				return new Version(int.Parse(match.Groups["Major"].Value), int.Parse(match.Groups["Minor"].Value), int.Parse(match.Groups["Update"].Value));
@@ -100,7 +105,7 @@ namespace System.Unicode.Build.Core
 
 							codePoint = new UnicodeCodePointRange(rangeStartCodePoint, codePoint.LastCodePoint);
 
-							name = name.Substring(1, name.Length - 8).ToUpperInvariant(); // Upper-case the name in order to respect unicode naming scheme. (Spec says all names are uppercase ASCII)
+							name = GetRangeCharacterNamePrefix(name.Substring(1, name.Length - 8));
 
 							rangeStartCodePoint = -1;
 						}
@@ -470,6 +475,8 @@ namespace System.Unicode.Build.Core
 					{
 					case UnihanProperty.SimplifiedVariant:
 					case UnihanProperty.TraditionalVariant:
+					case UnihanProperty.JapaneseOldVariant:
+					case UnihanProperty.JapaneseNewVariant:
 						break;
 					default:
 						// Ignore unhandled properties for now.
@@ -481,16 +488,52 @@ namespace System.Unicode.Build.Core
 					switch (reader.PropertyName)
 					{
 					case UnihanProperty.SimplifiedVariant:
-						entry.SimplifiedVariant = char.ConvertFromUtf32(HexCodePoint.ParsePrefixed(reader.PropertyValue));
+						entry.SimplifiedVariant = ParseCodePointList(reader.PropertyValue);
 						break;
 					case UnihanProperty.TraditionalVariant:
-						entry.TraditionalVariant = char.ConvertFromUtf32(HexCodePoint.ParsePrefixed(reader.PropertyValue));
+						entry.TraditionalVariant = ParseCodePointList(reader.PropertyValue);
+						break;
+					case UnihanProperty.JapaneseOldVariant:
+						entry.JapaneseOldVariant = ParseCodePointList(reader.PropertyValue);
+						break;
+					case UnihanProperty.JapaneseNewVariant:
+						entry.JapaneseNewVariant = ParseCodePointList(reader.PropertyValue);
 						break;
 					default:
 						throw new InvalidOperationException();
 					}
 				}
 			}
+		}
+
+		// Maps the label of a range in UnicodeData.txt to the prefix of the algorithmic character names (see DerivedName.txt), or null if the characters have no name.
+		private static string GetRangeCharacterNamePrefix(string rangeLabel)
+		{
+			if (rangeLabel == "CJK Ideograph" || rangeLabel.StartsWith("CJK Ideograph Extension ", StringComparison.Ordinal)) return "CJK UNIFIED IDEOGRAPH";
+
+			switch (rangeLabel)
+			{
+			case "Hangul Syllable": return "HANGUL SYLLABLE"; // Names are computed by HangulInfo.
+			case "Tangut Ideograph":
+			case "Tangut Ideograph Supplement": return "TANGUT IDEOGRAPH";
+			case "Jurchen Character": return "JURCHEN CHARACTER";
+			case "Seal Character": return "SMALL SEAL CHARACTER";
+			case "Non Private Use High Surrogate":
+			case "Private Use High Surrogate":
+			case "Low Surrogate":
+			case "Private Use":
+			case "Plane 15 Private Use":
+			case "Plane 16 Private Use": return null;
+			default: throw new InvalidDataException("Unknown range label in UnicodeData.txt: " + rangeLabel + ".");
+			}
+		}
+
+		private static string ParseCodePointList(string value)
+		{
+			var sb = new StringBuilder();
+			foreach (var item in value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+				sb.Append(char.ConvertFromUtf32(HexCodePoint.ParsePrefixed(item)));
+			return sb.ToString();
 		}
 
 		private static async Task ProcessUnihanNumericValues(IDataSource unihanDataSource, UnicodeInfoBuilder builder)

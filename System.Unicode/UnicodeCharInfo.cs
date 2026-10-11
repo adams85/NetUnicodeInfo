@@ -213,21 +213,41 @@ namespace System.Unicode
 		public string VietnameseReading => UnihanCharacterData.VietnameseReading;
 
 
-		/// <summary>Gets the simplified variant of the character from the Unihan data.</summary>
+		/// <summary>Gets the simplified variant(s) of the character from the Unihan data.</summary>
 		/// <remarks>
 		/// This is the kSimplifiedVariant Unicode property.
+		/// When the character has multiple simplified variants, they are concatenated in the returned string.
 		/// This property is only ever useful when the character is a CJK ideograph.
 		/// </remarks>
 		[ValueName("kSimplifiedVariant")]
 		public string SimplifiedVariant => UnihanCharacterData.SimplifiedVariant;
 
-		/// <summary>Gets the traditional variant of the character from the Unihan data.</summary>
+		/// <summary>Gets the traditional variant(s) of the character from the Unihan data.</summary>
 		/// <remarks>
 		/// This is the kTraditionalVariant Unicode property.
+		/// When the character has multiple traditional variants, they are concatenated in the returned string.
 		/// This property is only ever useful when the character is a CJK ideograph.
 		/// </remarks>
 		[ValueName("kTraditionalVariant")]
 		public string TraditionalVariant => UnihanCharacterData.TraditionalVariant;
+
+		/// <summary>Gets the Japanese old variant(s) of the character from the Unihan data.</summary>
+		/// <remarks>
+		/// This is the kJapaneseOldVariant Unicode property.
+		/// When the character has multiple old variants, they are concatenated in the returned string.
+		/// This property is only ever useful when the character is a CJK ideograph.
+		/// </remarks>
+		[ValueName("kJapaneseOldVariant")]
+		public string JapaneseOldVariant => UnihanCharacterData.JapaneseOldVariant;
+
+		/// <summary>Gets the Japanese new variant(s) of the character from the Unihan data.</summary>
+		/// <remarks>
+		/// This is the kJapaneseNewVariant Unicode property.
+		/// When the character has multiple new variants, they are concatenated in the returned string.
+		/// This property is only ever useful when the character is a CJK ideograph.
+		/// </remarks>
+		[ValueName("kJapaneseNewVariant")]
+		public string JapaneseNewVariant => UnihanCharacterData.JapaneseNewVariant;
 
 		internal UnicodeCharInfo(int codePoint, int unicodeCharacterDataIndex, int unihanCharacterDataIndex, string block)
 		{

@@ -30,7 +30,7 @@
 		<PackageIcon>packageIcon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/adams85/NetUnicodeInfo.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageReleaseNotes>This is a fork of the original UnicodeInformation project (https://github.com/hexawyz/NetUnicodeInfo), with Unicode version updated to 17.0.</PackageReleaseNotes>
+		<PackageReleaseNotes>This is a fork of the original UnicodeInformation project (https://github.com/hexawyz/NetUnicodeInfo), with Unicode version updated to 18.0.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<!-- Add the icon for the package. -->

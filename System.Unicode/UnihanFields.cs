@@ -24,5 +24,7 @@
 
 		SimplifiedVariant = 4096,
 		TraditionalVariant = 8192,
+		JapaneseOldVariant = 16384,
+		JapaneseNewVariant = 32768,
 	}
 }
